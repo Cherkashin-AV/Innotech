@@ -1,12 +1,9 @@
 package ru.vtb.javaCourse.Task1;
 
 import java.io.*;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
-public class Account implements Serializable{
+public class Account implements Serializable, Cloneable{
     @Serial
     private static final long serialVersionUID = 1L;
     protected String name = null;
@@ -84,5 +81,34 @@ public class Account implements Serializable{
 
     }
 
+    public AccountMemento getMemento(){
+        return new AccountMemento(name, getCurrency());
+    }
+
+    public void setMemento(AccountMemento memento){
+        name = memento.getName();
+        currency.clear();
+        currency.putAll(memento.getCurrency());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (!(o instanceof Account))
+            return false;
+        Account account = (Account) o;
+        return name.equals(account.name) && currency.equals(account.currency);
+    }
+
+    public Account clone() {
+        try {
+            return (Account) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 

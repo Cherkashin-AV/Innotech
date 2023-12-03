@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.vtb.javaCourse.Task1.Account;
+import ru.vtb.javaCourse.Task1.AccountMemento;
 import ru.vtb.javaCourse.Task1.Currency;
 
 import java.util.EmptyStackException;
@@ -87,5 +88,29 @@ public class TestAccount {
         Assert.assertEquals("Не корректное имя владельца","Name3", a.getName());
         Assert.assertEquals("Не корректное количество валют",4, a.getCurrency().size());
         Assert.assertEquals("Не корректное количество для валюты EUR",101, a.getCurrency().get(Currency.EUR).intValue());
+    }
+
+    @Test
+    public void testMemento(){
+        account.setName("Name2");
+        account.setCurrency(Currency.EUR,100);
+        account.setCurrency(Currency.USD,50);
+        AccountMemento memento1 = account.getMemento();
+        Account accountClone1 = account.clone();
+
+        account.setName("Name3");
+        account.setCurrency(Currency.RUR,1000);
+        account.setCurrency(Currency.EUR,101);
+        account.setCurrency(Currency.CHY,50);
+
+        AccountMemento memento2 = account.getMemento();
+        Account accountClone2 = account.clone();
+
+        Assert.assertNotEquals(accountClone1, account);
+        account.setMemento(memento1);
+        Assert.assertEquals(accountClone1, account);
+
+        account.setMemento(memento2);
+        Assert.assertEquals(accountClone2, account);
     }
 }
